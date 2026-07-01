@@ -334,6 +334,8 @@
     .shopThumb { display: block; width: 56px; height: 56px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); flex-shrink: 0; }
     .shopItem .thumb { width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; display: block; border: 0; border-radius: 0; }
     .del { border: 0; background: #FCEBEA; color: #B85C4A; border-radius: var(--radius-md); width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .edit { border: 0; background: var(--sora-2); color: var(--sora-deep); border-radius: var(--radius-md); width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .shopActions { display: flex; gap: 6px; flex-shrink: 0; }
     
     /* FAB Button */
     .fab { position: fixed; right: calc(50% - 200px); bottom: calc(var(--bottom) + 16px + env(safe-area-inset-bottom)); width: 50px; height: 50px; border-radius: 50%; border: 0; background: var(--sora); color: white; display: none; place-items: center; font-size: 24px; z-index: 60; box-shadow: 0 4px 14px rgba(74, 156, 190, 0.4); transition: all 0.2s; cursor: pointer; }
@@ -799,32 +801,54 @@ let shopping=readStore('fg_shop',null)||[
  {name:'mont-bell 帽子 / 雨具',cat:'服飾、雜貨',store:'mont-bell 福岡天神',note:'實用優先。',img:'',done:false},
  {name:'MUJI 咖哩 / 文具',cat:'伴手禮、食物',store:'MUJI',note:'輕小、限定商品優先。',img:'',done:false}
 ];let shopFilter='全部';
+let shopEditIdx=null;
 const SHOP_CATS=['保養品','保健食品','醫療用品','服飾、雜貨','伴手禮、食物'];
-function shopCatOptions(){return SHOP_CATS.map(c=>`<option>${c}</option>`).join('')}
+function escAttr(s){return String(s??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+function shopCatOptions(sel=''){
+  const opts=SHOP_CATS.map(c=>`<option${c===sel?' selected':''}>${c}</option>`).join('');
+  return sel&&!SHOP_CATS.includes(sel)?opts+`<option selected>${escAttr(sel)}</option>`:opts;
+}
 
 function saveShop(){localStorage.setItem('fg_shop',JSON.stringify(shopping))}
 
 function renderShopping(){
-  const cats=['全部','未買','已買',...Array.from(new Set(shopping.map(x=>x.cat).filter(Boolean)))];
-  let data=shopping.filter(x=>shopFilter==='全部'||(shopFilter==='未買'&&!x.done)||(shopFilter==='已買'&&x.done)||x.cat===shopFilter);
+  const cats=['全部',...Array.from(new Set(shopping.map(x=>x.cat).filter(Boolean)))];
+  let data=shopping.filter(x=>shopFilter==='全部'||x.cat===shopFilter);
   data=[...data.filter(x=>!x.done),...data.filter(x=>x.done)];
   document.getElementById('page-shopping').innerHTML=`<div class="card compact"><div class="title" style="margin:0; color:var(--sora-deep);">Shopping List</div><div class="muted" style="font-size:11px; margin-top:2px;">右下角新增商品，可填寫圖片網路 URL。</div></div><div class="shopFilters">${cats.map(c=>`<button class="filter ${shopFilter===c?'active':''}" onclick="shopFilter='${c}';renderShopping()">${c}</button>`).join('')}</div>${data.length?data.map(x=>shopCard(x,shopping.indexOf(x))).join(''):'<div class="card empty">目前沒有商品</div>'}`;
 }
 
 function shopCard(x,idx){
   const thumb=x.img?`<a href="${x.img}" target="_blank" class="shopThumb"><img class="thumb" src="${x.img}" alt="" onerror="this.parentElement.style.display='none'"></a>`:'';
-  return `<div class="card compact shopItem ${x.img?'has-thumb':''} ${x.done?'done':''}"><button class="check" onclick="shopping[${idx}].done=!shopping[${idx}].done;saveShop();renderShopping()">${x.done?i('check'):''}</button>${thumb}<div class="shopBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin:2px 0 4px;">${x.cat||'未分類'} ｜ ${x.store||'未指定店家'}</div>${x.note?`<div class="small" style="color:var(--text-muted);">${x.note}</div>`:''}</div><button class="del" onclick="shopping.splice(${idx},1);saveShop();renderShopping()">${i('trash')}</button></div>`;
+  return `<div class="card compact shopItem ${x.img?'has-thumb':''} ${x.done?'done':''}"><button class="check" onclick="shopping[${idx}].done=!shopping[${idx}].done;saveShop();renderShopping()">${x.done?i('check'):''}</button>${thumb}<div class="shopBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin:2px 0 4px;">${x.cat||'未分類'} ｜ ${x.store||'未指定店家'}</div>${x.note?`<div class="small" style="color:var(--text-muted);">${x.note}</div>`:''}</div><div class="shopActions"><button class="edit" onclick="openEditSheet(${idx})" title="編輯">${i('pencil-simple')}</button><button class="del" onclick="shopping.splice(${idx},1);saveShop();renderShopping()" title="刪除">${i('trash')}</button></div></div>`;
 }
 
-function openSheet(){document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">新增清單商品</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="sn" class="field" placeholder="商品名稱"><select id="sc" class="field">${shopCatOptions()}</select><input id="ss" class="field" placeholder="建議店家"><input id="si" class="field" placeholder="圖片 URL（可空白）"><textarea id="st" class="field" placeholder="備註備忘"></textarea><div class="sheetActions"><button class="btn ghost" onclick="addShop(false)">繼續新增</button><button class="btn" onclick="addShop(true)">儲存確認</button></div>`;setTimeout(()=>document.getElementById('sn').focus(),50)}
-function closeSheet(){document.getElementById('sheetBackdrop').classList.remove('open');document.getElementById('shopSheet').classList.remove('open')}
-function addShop(close){const n=document.getElementById('sn').value.trim();if(!n)return;shopping.push({name:n,cat:document.getElementById('sc').value,store:document.getElementById('ss').value.trim(),img:document.getElementById('si').value.trim(),note:document.getElementById('st').value.trim(),done:false});saveShop();renderShopping(); if(close) closeSheet(); else ['sn','ss','si','st'].forEach(id=>document.getElementById(id).value='')}
+function renderShopSheet(){
+  const editing=shopEditIdx!=null;
+  const x=editing?shopping[shopEditIdx]:null;
+  document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">${editing?'編輯清單商品':'新增清單商品'}</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="sn" class="field" placeholder="商品名稱" value="${escAttr(x?.name)}"><select id="sc" class="field">${shopCatOptions(x?.cat||SHOP_CATS[0])}</select><input id="ss" class="field" placeholder="建議店家" value="${escAttr(x?.store)}"><input id="si" class="field" placeholder="圖片 URL（可空白）" value="${escAttr(x?.img)}"><textarea id="st" class="field" placeholder="備註備忘">${escAttr(x?.note)}</textarea><div class="sheetActions">${editing?`<button class="btn" style="grid-column:1/-1;" onclick="saveShopEdit()">儲存確認</button>`:`<button class="btn ghost" onclick="addShop(false)">繼續新增</button><button class="btn" onclick="addShop(true)">儲存確認</button>`}</div>`;
+  setTimeout(()=>document.getElementById('sn').focus(),50);
+}
+function openSheet(){expEditIdx=null;shopEditIdx=null;document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');renderShopSheet()}
+function openEditSheet(idx){expEditIdx=null;shopEditIdx=idx;document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');renderShopSheet()}
+function closeSheet(){shopEditIdx=null;expEditIdx=null;document.getElementById('sheetBackdrop').classList.remove('open');document.getElementById('shopSheet').classList.remove('open')}
+function readShopForm(){
+  const n=document.getElementById('sn').value.trim();
+  if(!n)return null;
+  return{name:n,cat:document.getElementById('sc').value,store:document.getElementById('ss').value.trim(),img:document.getElementById('si').value.trim(),note:document.getElementById('st').value.trim()};
+}
+function addShop(close){const data=readShopForm();if(!data)return;shopping.push({...data,done:false});saveShop();renderShopping();if(close)closeSheet();else ['sn','ss','si','st'].forEach(id=>document.getElementById(id).value='')}
+function saveShopEdit(){const data=readShopForm();if(!data||shopEditIdx==null)return;shopping[shopEditIdx]={...data,done:shopping[shopEditIdx].done};saveShop();renderShopping();closeSheet()}
 
 let expenses=readStore('fg_exp',[]);function saveExp(){localStorage.setItem('fg_exp',JSON.stringify(expenses))}
 let expFilter='全部';
+let expEditIdx=null;
 const EXP_CATS=['食','宿','交通','購物','娛樂','門票'];
 const EXP_CURRENCIES=['JPY','TWD','USD'];
-function expCatOptions(){return EXP_CATS.map(c=>`<option>${c}</option>`).join('')}
+function expCatOptions(sel=''){
+  const opts=EXP_CATS.map(c=>`<option${c===sel?' selected':''}>${c}</option>`).join('');
+  return sel&&!EXP_CATS.includes(sel)?opts+`<option selected>${escAttr(sel)}</option>`:opts;
+}
 function expCurrencyOptions(sel='JPY'){return EXP_CURRENCIES.map(c=>`<option${c===sel?' selected':''}>${c}</option>`).join('')}
 function moneyFmt(cur,amt){const sym={JPY:'¥',TWD:'NT$',USD:'$'};return (sym[cur]||cur+' ')+Number(amt).toLocaleString()}
 function expTotalsHtml(){
@@ -833,9 +857,6 @@ function expTotalsHtml(){
   const parts=Object.entries(map).map(([c,a])=>moneyFmt(c,a));
   return parts.length?parts.join(' ｜ '):'¥0';
 }
-function expenseCard(x,idx){
-  return `<div class="card compact expItem"><div class="expBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin-top:2px;">${x.date} ｜ ${x.cat||'未分類'} ｜ ${x.currency||'JPY'}</div></div><div class="expAmt" style="font-size:15px; font-weight:700; color:var(--sora); white-space:nowrap;">${moneyFmt(x.currency||'JPY',x.amount)}</div><button class="del" onclick="expenses.splice(${idx},1);saveExp();renderExpense()">${i('trash')}</button></div>`;
-}
 function renderExpense(){
   const extra=Array.from(new Set(expenses.map(x=>x.cat).filter(c=>c&&!EXP_CATS.includes(c))));
   const allCats=['全部',...EXP_CATS,...extra];
@@ -843,20 +864,36 @@ function renderExpense(){
   data=[...data].reverse();
   document.getElementById('page-expense').innerHTML=`<div class="card compact"><div class="title" style="margin:0; color:var(--sora-deep);">旅途記帳</div><div class="muted" style="font-size:11px; margin-top:2px;">右下角新增紀錄，可選幣別與消費類別。</div></div><div class="shopFilters">${allCats.map(c=>`<button class="filter ${expFilter===c?'active':''}" onclick="expFilter='${c}';renderExpense()">${c}</button>`).join('')}</div><div class="card compact"><div class="between"><span>累積花費總計</span><span class="total" style="font-size:16px;">${expTotalsHtml()}</span></div></div>${data.length?data.map(x=>expenseCard(x,expenses.indexOf(x))).join(''):'<div class="card empty">目前尚無本地記帳紀錄</div>'}`;
 }
-function openExpenseSheet(){
-  document.getElementById('sheetBackdrop').classList.add('open');
-  document.getElementById('shopSheet').classList.add('open');
+function expenseCard(x,idx){
+  return `<div class="card compact expItem"><div class="expBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin-top:2px;">${x.date} ｜ ${x.cat||'未分類'} ｜ ${x.currency||'JPY'}</div></div><div class="expAmt" style="font-size:15px; font-weight:700; color:var(--sora); white-space:nowrap;">${moneyFmt(x.currency||'JPY',x.amount)}</div><div class="shopActions"><button class="edit" onclick="openEditExpenseSheet(${idx})" title="編輯">${i('pencil-simple')}</button><button class="del" onclick="expenses.splice(${idx},1);saveExp();renderExpense()" title="刪除">${i('trash')}</button></div></div>`;
+}
+function renderExpenseSheet(){
+  const editing=expEditIdx!=null;
+  const x=editing?expenses[expEditIdx]:null;
   const defaultDate=days[currentDay].date.slice(0,10);
-  document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">新增記帳紀錄</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="edate" class="field" value="${defaultDate}"><select id="ecat" class="field">${expCatOptions()}</select><input id="ename" class="field" placeholder="消費項目（例：一蘭拉麵）"><div class="fieldRow"><select id="ecur" class="field" style="margin-top:0;">${expCurrencyOptions('JPY')}</select><input id="eamt" class="field" type="number" placeholder="金額" style="margin-top:0;"></div><div class="sheetActions"><button class="btn ghost" onclick="addExpense(false)">繼續新增</button><button class="btn" onclick="addExpense(true)">儲存確認</button></div>`;
+  document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">${editing?'編輯記帳紀錄':'新增記帳紀錄'}</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="edate" class="field" value="${escAttr(x?.date||defaultDate)}"><select id="ecat" class="field">${expCatOptions(x?.cat||EXP_CATS[0])}</select><input id="ename" class="field" placeholder="消費項目（例：一蘭拉麵）" value="${escAttr(x?.name)}"><div class="fieldRow"><select id="ecur" class="field" style="margin-top:0;">${expCurrencyOptions(x?.currency||'JPY')}</select><input id="eamt" class="field" type="number" placeholder="金額" style="margin-top:0;" value="${x?.amount??''}"></div><div class="sheetActions">${editing?`<button class="btn" style="grid-column:1/-1;" onclick="saveExpenseEdit()">儲存確認</button>`:`<button class="btn ghost" onclick="addExpense(false)">繼續新增</button><button class="btn" onclick="addExpense(true)">儲存確認</button>`}</div>`;
   setTimeout(()=>document.getElementById('ename').focus(),50);
 }
-function addExpense(close){
+function openExpenseSheet(){shopEditIdx=null;expEditIdx=null;document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');renderExpenseSheet()}
+function openEditExpenseSheet(idx){shopEditIdx=null;expEditIdx=idx;document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');renderExpenseSheet()}
+function readExpenseForm(){
   const name=document.getElementById('ename').value.trim(),amount=document.getElementById('eamt').value;
-  if(!name||!amount)return;
-  expenses.push({date:document.getElementById('edate').value,name,cat:document.getElementById('ecat').value,currency:document.getElementById('ecur').value,amount:Number(amount)});
+  if(!name||!amount)return null;
+  return{date:document.getElementById('edate').value,name,cat:document.getElementById('ecat').value,currency:document.getElementById('ecur').value,amount:Number(amount)};
+}
+function addExpense(close){
+  const data=readExpenseForm();
+  if(!data)return;
+  expenses.push(data);
   saveExp();renderExpense();
   if(close)closeSheet();
   else{document.getElementById('ename').value='';document.getElementById('eamt').value=''}
+}
+function saveExpenseEdit(){
+  const data=readExpenseForm();
+  if(!data||expEditIdx==null)return;
+  expenses[expEditIdx]=data;
+  saveExp();renderExpense();closeSheet();
 }
 
 document.getElementById('shopFab').onclick=openSheet;
