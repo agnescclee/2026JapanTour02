@@ -15,17 +15,18 @@
   
   <style>
     :root {
-      /* 優化後的福岡優雅色調：天空藍（Sora）與 index.html 的練色、消炭色、灰線完美融合 */
-      --sora: #4A9CBE;
-      --sora-2: #EAF4F8;
-      --yamabuki: #F8B500;
-      /* 山吹色 */
-      --neriiro: #FCFAF2;
-      /* 練色背景 */
-      --kesizumi: #525750;
-      /* 消炭文字色 */
-      --haiku: #d6d3d1;
-      /* 灰輔助線 */
+      /* 福岡藍調美學核心 */
+      --sora: #58B2DC;       /* 空色 - 主色調（Icon、亮點） */
+      --sora-2: #EAF4F8;     /* 空色淡 - 標籤與輕背景 */
+      --sora-deep: #2E7FA6;  /* 深空藍（碧瑠璃） - 專門用於關鍵標題跳色 */
+      --yamabuki: #F8B500;   /* 山吹色 - 警告與重要提醒 */
+      --neriiro: #FCFAF2;    /* 練色 - 全域背景 */
+      
+      /* 文字色彩階梯 */
+      --text-main: #3A4C56;  /* 藍鼠調和 - 主文字色 */
+      --text-muted: #6E8896; /* 千草微調 - 輔助與次要說明文字色 */
+      --line: rgba(90, 126, 144, 0.15); /* 微藍細輔助線 */
+      
       --radius-lg: 16px;
       --radius-md: 10px;
       --bottom: 78px;
@@ -36,7 +37,7 @@
     body {
       margin: 0;
       background-color: var(--neriiro);
-      color: var(--kesizumi);
+      color: var(--text-main);
       font-family: 'Zen Maru Gothic', system-ui, sans-serif;
       font-size: 14px;
       line-height: 1.7;
@@ -45,12 +46,13 @@
 
     /* 手繪質感大氣網格背景 */
     .bg-pattern {
-      background-image: radial-gradient(#d6d3d1 1px, transparent 1px);
+      background-image: radial-gradient(rgba(110, 136, 150, 0.18) 1px, transparent 1px);
       background-size: 32px 32px;
     }
 
     h1, h2, h3, h4, .serif {
       font-family: 'Noto Serif TC', serif;
+      color: var(--text-main);
     }
 
     a { color: inherit; text-decoration: none; }
@@ -89,22 +91,16 @@
       color: var(--sora);
       font-weight: 700;
       text-transform: uppercase;
-      margin-bottom: 4px; /* 確保年份與主標題有舒適的間距 */
+      margin-bottom: 4px;
       line-height: 1;
     }
-    h1 {
+    header h1 {
       font-size: 22px;
       font-weight: 700;
       margin: 0;
-      color: var(--kesizumi);
+      color: var(--sora-deep);
       letter-spacing: 0.1em;
       line-height: 1.3;
-    }
-    .sub {
-      font-size: 11px;
-      color: #8a8e87;
-      margin-top: 6px;
-      font-family: 'Zen Maru Gothic', sans-serif;
     }
 
     main { padding: 16px 16px 0; }
@@ -114,53 +110,56 @@
     /* Elegant Card Layout */
     .card {
       background: #FFFFFF;
-      border: 1px solid rgba(214, 211, 209, 0.4);
+      border: 1px solid var(--line);
       border-radius: var(--radius-lg);
       padding: 20px;
       margin: 0 0 16px;
-      box-shadow: 0 4px 16px rgba(82, 87, 80, 0.02);
+      box-shadow: 0 4px 16px rgba(58, 76, 86, 0.01);
     }
     .card.compact { padding: 14px 16px; }
     .card.focus {
       background: #FFFFFF;
       border-left: 4px solid var(--sora);
     }
+    .card.focus .title {
+      color: var(--sora-deep) !important;
+    }
 
     .row { display: flex; gap: 14px; align-items: flex-start; }
     .between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .muted { color: #8a8e87; font-size: 13px; }
+    .muted { color: var(--text-muted); font-size: 13px; }
     
     .sectionTitle {
       font-family: 'Noto Serif TC', serif;
       font-size: 15px;
       font-weight: 700;
-      color: var(--kesizumi);
+      color: var(--text-main);
       margin: 24px 4px 12px;
-      border-l-4 solid var(--sora);
+      border-left: 4px solid var(--sora);
       padding-left: 8px;
     }
     
-    .title { font-size: 16px; margin: 0 0 8px; font-weight: 600; color: var(--kesizumi); }
+    .title { font-size: 16px; margin: 0 0 8px; font-weight: 600; color: var(--text-main); }
     .small { font-size: 12px; }
     
-    .pill {
+    .day-weekday-tag {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
       border-radius: 6px;
-      background: var(--sora-2);
-      color: #33718c;
-      padding: 3px 8px;
+      background: #F0F2F4;
+      color: var(--text-muted);
+      padding: 3px 10px;
       font-size: 11px;
       font-weight: 500;
-      margin: 4px 4px 0 0;
+      flex-shrink: 0;
+      font-family: 'Zen Maru Gothic', sans-serif;
     }
 
     /* Fine Buttons */
     .btn {
       border: 0;
       border-radius: var(--radius-md);
-      background: var(--kesizumi);
+      background: var(--sora-deep);
       color: white;
       padding: 8px 16px;
       display: inline-flex;
@@ -172,13 +171,13 @@
       cursor: pointer;
     }
     .btn:active { transform: scale(0.98); }
-    .btn.light { background: var(--sora-2); color: #2E7FA6; }
-    .btn.ghost { background: #fff; border: 1px solid var(--haiku); color: var(--kesizumi); }
+    .btn.light { background: var(--sora-2); color: var(--sora-deep); }
+    .btn.ghost { background: #fff; border: 1px solid var(--text-muted); color: var(--text-main); }
     
     .icon { color: var(--sora); font-size: 22px; flex: 0 0 auto; }
     .ph-duotone { --ph-duotone-opacity: 0.25; }
 
-    /* Sticky Tab Bar with index.html style */
+    /* Sticky Tab Bar */
     .tabs {
       position: fixed;
       left: 50%;
@@ -208,32 +207,48 @@
       transition: colors 0.2s;
       cursor: pointer;
     }
-    .tab i { font-size: 22px; }
-    .tab.active { color: var(--sora); font-weight: 700; }
+    .tab i { font-size: 22px; color: inherit; }
+    .tab span { color: inherit; }
+    .tab.active,
+    .tab.active i,
+    .tab.active span { color: var(--sora); }
+    .tab.active span { font-weight: 700; }
 
-    /* Elegant Sub-navigation for Days (index.html style) */
-    .dayNavScroll {
-      overflow-x: auto;
-      white-space: nowrap;
-      padding: 6px 2px 12px;
-      margin-bottom: 8px;
-      sticky top: 73px;
+    /* 日期導覽列 */
+    .dayNavContainer {
+      padding: 12px 4px 16px;
+      text-align: center;
+      position: sticky;
+      top: 73px;
       z-index: 30;
       background: var(--neriiro);
     }
-    .dayNavScroll::-webkit-scrollbar { display: none; }
+    .month-header {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .dayNavScroll {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+    }
     .subtab-btn {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: var(--radius-md);
+      flex: 1;
+      min-width: 34px;
+      padding: 6px 0;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 500;
-      border: 1px solid var(--haiku);
+      border: 1px solid var(--line);
       background: #FFFFFF;
-      color: #78716c;
-      margin-right: 6px;
+      color: var(--text-muted);
       text-align: center;
       transition: all 0.2s;
+      cursor: pointer;
     }
     .subtab-btn.active {
       background: var(--sora);
@@ -242,6 +257,7 @@
       font-weight: 700;
       box-shadow: 0 2px 8px rgba(74, 156, 190, 0.2);
     }
+    .flex-1 { flex: 1; min-width: 0; }
 
     /* Dashed Timeline Style */
     .timeline { position: relative; margin-left: 8px; padding-left: 24px; }
@@ -252,9 +268,10 @@
       top: 8px;
       bottom: 8px;
       width: 2px;
-      background-image: linear-gradient(to bottom, var(--haiku) 50%, rgba(255,255,255,0) 0%);
+      background-image: linear-gradient(to bottom, var(--text-muted) 40%, rgba(255,255,255,0) 0%);
       background-size: 2px 8px;
       background-repeat: repeat-y;
+      opacity: 0.3;
     }
     .tl { position: relative; margin: 0 0 28px; }
     .tl:before {
@@ -269,76 +286,98 @@
       border-radius: 50%;
       z-index: 10;
     }
-    .time { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 12px; color: var(--sora); margin-bottom: 4px; }
-    .tl h3 { font-size: 15px; margin: 0 0 4px; font-weight: 600; color: var(--kesizumi); display: flex; align-items: center; gap: 6px; }
-    .tl h3 i { font-size: 18px; color: var(--kesizumi); }
+    
+    .time { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 12px; color: var(--sora-deep); margin-bottom: 4px; }
+    .tl h3 { font-size: 15px; margin: 0 0 4px; font-weight: 600; color: var(--sora-deep); display: flex; align-items: center; gap: 6px; }
+    .tl h3 i { font-size: 18px; color: var(--sora-deep); }
+    .tl-title { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+    .map-pin-link {
+      color: #d6d3d1;
+      font-size: 20px;
+      flex-shrink: 0;
+      transition: color 0.2s;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+    }
+    .map-pin-link:hover { color: var(--sora); }
+    .hotel-map-link {
+      color: #a8a29e;
+      font-size: 18px;
+      margin-left: 8px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+    }
+    .hotel-map-link:hover { color: var(--sora); }
+    .spot-head { margin: 0 0 6px; }
     
     .actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .note { border-left: 3px solid var(--haiku); padding-left: 10px; color: #78716c; font-size: 12px; margin-top: 6px; line-height: 1.6; }
+    .note { border-left: 3px solid var(--text-muted); padding-left: 10px; color: var(--text-muted); font-size: 12px; margin-top: 6px; line-height: 1.6; opacity: 0.85; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     
-    .infoItem { border-top: 1px solid rgba(214, 211, 209, 0.4); padding: 12px 0; }
-    .infoItem:first-child { border-top: 0; padding-top: 0; }
+    .infoItem { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; }
+    .infoItem:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
     
     /* Shopping List & Filters */
     .shopFilters { display: flex; gap: 6px; overflow-x: auto; padding: 2px 2px 12px; margin-bottom: 4px; }
     .shopFilters::-webkit-scrollbar { display: none; }
-    .filter { border: 1px solid var(--haiku); background: #fff; border-radius: var(--radius-md); padding: 6px 12px; color: #78716c; font-size: 12px; white-space: nowrap; cursor: pointer; }
-    .filter.active { background: var(--kesizumi); border-color: var(--kesizumi); color: white; }
+    .filter { border: 1px solid var(--line); background: #fff; border-radius: var(--radius-md); padding: 6px 12px; color: var(--text-muted); font-size: 12px; white-space: nowrap; cursor: pointer; }
+    .filter.active { background: var(--text-main); border-color: var(--text-main); color: white; }
     
-    .shopItem { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; }
-    .check { width: 20px; height: 20px; border: 1.5px solid var(--haiku); border-radius: 4px; background: #fff; margin-top: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--sora); }
+    .shopItem { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: start; }
+    .shopItem.has-thumb { grid-template-columns: auto 56px 1fr auto; }
+    .check { width: 20px; height: 20px; border: 1.5px solid var(--line); border-radius: 4px; background: #fff; margin-top: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--sora); }
     .shopItem.done { opacity: .45; }
     .shopItem.done .name { text-decoration: line-through; }
+    .shopThumb { display: block; width: 56px; height: 56px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--line); flex-shrink: 0; }
+    .shopItem .thumb { width: 100%; height: 100%; max-width: none; margin: 0; object-fit: cover; display: block; border: 0; border-radius: 0; }
     .del { border: 0; background: #FCEBEA; color: #B85C4A; border-radius: var(--radius-md); width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .thumb { max-width: 100%; border-radius: var(--radius-md); margin-top: 8px; border: 1px solid var(--haiku); }
     
-    /* Smooth Float Action Button */
-    .fab { position: fixed; right: calc(50% - 200px); bottom: calc(var(--bottom) + 16px + env(safe-area-inset-bottom)); width: 50px; height: 50px; border-radius: 50%; border: 0; background: var(--sora); color: white; display: grid; place-items: center; font-size: 24px; z-index: 60; box-shadow: 0 4px 14px rgba(74, 156, 190, 0.4); transition: all 0.2s; cursor: pointer; }
+    /* FAB Button */
+    .fab { position: fixed; right: calc(50% - 200px); bottom: calc(var(--bottom) + 16px + env(safe-area-inset-bottom)); width: 50px; height: 50px; border-radius: 50%; border: 0; background: var(--sora); color: white; display: none; place-items: center; font-size: 24px; z-index: 60; box-shadow: 0 4px 14px rgba(74, 156, 190, 0.4); transition: all 0.2s; cursor: pointer; }
+    .fab.show { display: grid; }
     .fab:active { transform: scale(0.95); }
     @media(max-width:430px){ .fab { right: 16px; } }
     
     /* Form Bottom Sheets */
-    .sheetBackdrop { position: fixed; inset: 0; background: rgba(82, 87, 80, 0.3); backdrop-filter: blur(4px); z-index: 70; display: none; }
-    .sheet { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); max-width: 430px; width: 100%; background: var(--neriiro); border-radius: 20px 20px 0 0; border: 1px solid var(--haiku); padding: 20px calc(20px + env(safe-area-inset-bottom)); z-index: 80; display: none; box-shadow: 0 -8px 32px rgba(0,0,0,0.05); }
+    .sheetBackdrop { position: fixed; inset: 0; background: rgba(58, 76, 86, 0.25); backdrop-filter: blur(4px); z-index: 70; display: none; }
+    .sheet { position: fixed; left: 50%; bottom: 0; transform: translateX(-50%); max-width: 430px; width: 100%; background: var(--neriiro); border-radius: 20px 20px 0 0; border: 1px solid var(--line); padding: 20px calc(20px + env(safe-area-inset-bottom)); z-index: 80; display: none; box-shadow: 0 -8px 32px rgba(0,0,0,0.05); }
     .sheet.open, .sheetBackdrop.open { display: block; }
     
-    .field { width: 100%; border: 1px solid var(--haiku); background: #fff; border-radius: var(--radius-md); padding: 10px 12px; margin: 6px 0 12px; color: var(--kesizumi); outline: none; }
+    .field { width: 100%; border: 1px solid var(--line); background: #fff; border-radius: var(--radius-md); padding: 10px 12px; margin: 6px 0 12px; color: var(--text-main); outline: none; }
     .field:focus { border-color: var(--sora); }
     textarea.field { min-height: 80px; resize: vertical; }
     .sheetActions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
     
-    .expenseItem { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; border-top: 1px solid rgba(214, 211, 209, 0.4); padding: 12px 0; }
+    .expItem { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: start; }
+    .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .total { font-size: 20px; font-weight: 700; text-align: right; color: var(--sora); font-family: 'Zen Maru Gothic', sans-serif; }
-    .empty { color: #a1a1aa; text-align: center; padding: 32px 0; font-size: 13px; }
-    
-    /* Fade animation */
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in { animation: fadeIn 0.35s ease-out forwards; }
+    .empty { color: var(--text-muted); text-align: center; padding: 32px 0; font-size: 13px; }
   </style>
 </head>
 <body class="bg-pattern">
 <div class="app">
 <header>
-  <div class="border-wrap">
+  <div class="header-wrap">
     <span class="year-tag">2026 Japan</span>
     <h1>福岡放空之旅</h1>
   </div>
-  <div class="sub">07/04 – 07/12 ｜ Family Guide</div>
 </header>
 <main>
-  <section id="page-info" class="page active animate-fade-in"></section>
-  <section id="page-daily" class="page animate-fade-in"></section>
-  <section id="page-shopping" class="page animate-fade-in"></section>
-  <section id="page-expense" class="page animate-fade-in"></section>
+  <section id="page-info" class="page active"></section>
+  <section id="page-daily" class="page"></section>
+  <section id="page-shopping" class="page"></section>
+  <section id="page-expense" class="page"></section>
 </main>
 <nav class="tabs">
-  <button class="tab active" data-page="info"><i class="ph-duotone ph-info"></i><span>資訊</span></button>
-  <button class="tab" data-page="daily"><i class="ph-duotone ph-path"></i><span>行程</span></button>
-  <button class="tab" data-page="shopping"><i class="ph-duotone ph-shopping-bag"></i><span>購物</span></button>
-  <button class="tab" data-page="expense"><i class="ph-duotone ph-coins"></i><span>記帳</span></button>
+  <button type="button" class="tab active" data-page="info" onclick="switchPage('info')"><i class="ph-duotone ph-info"></i><span>資訊</span></button>
+  <button type="button" class="tab" data-page="daily" onclick="switchPage('daily')"><i class="ph-duotone ph-path"></i><span>行程</span></button>
+  <button type="button" class="tab" data-page="shopping" onclick="switchPage('shopping')"><i class="ph-duotone ph-shopping-bag"></i><span>購物</span></button>
+  <button type="button" class="tab" data-page="expense" onclick="switchPage('expense')"><i class="ph-duotone ph-coins"></i><span>記帳</span></button>
 </nav>
-<button id="shopFab" class="fab" style="display:none"><i class="ph ph-plus"></i></button>
+<button type="button" id="shopFab" class="fab"><i class="ph ph-plus"></i></button>
 <div id="sheetBackdrop" class="sheetBackdrop"></div>
 <div id="shopSheet" class="sheet"></div>
 </div>
@@ -346,133 +385,422 @@
 <script>
 const hotel={name:'Mitsui Garden Hotel Fukuoka Gion',jp:'三井ガーデンホテル福岡祇園',addr:'〒812-0011 福岡県福岡市博多区博多駅前2丁目8-15',phone:'+81-92-414-3131',maps:'https://www.google.com/maps/search/?api=1&query=Mitsui+Garden+Hotel+Fukuoka+Gion'};
 const mapSearch=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
-const dir=q=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(q);
+function navUrl(destination,origin,icon){
+  if(!origin) return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destination);
+  const mode=icon==='footprints'?'walking':'transit';
+  return 'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(origin)+'&destination='+encodeURIComponent(destination)+'&travelmode='+mode;
+}
 const days=[
-{date:'2026/07/04 Sat',short:'7/04',label:'抵達福岡',people:'Agnes + 老公',focus:'先抵達、寄放行李、熟悉飯店周邊。今天不要排太滿。',weather:'福岡夏天濕熱，防曬與輕便外套都放上層。',items:[
- ['04:00','木柵出發','開車前往桃園機場。抓 50–70 分鐘，05:00 左右抵達最安心。','Taoyuan International Airport Terminal 2','car'],
- ['08:00','BR106 TPE → FUK','預計 11:20 抵達福岡。入境後搭接駁到國內線航廈，再轉地鐵進市區。','Fukuoka Airport International Terminal','airplane-tilt'],
+{date:'2026/07/04 Sat',dayNum:'第一日',weekday:'週六',short:'04',label:'抵達福岡',peopleIcon:'users',focus:'首日抵達寄行李，熟悉周邊緩步放空。',weatherTxt:'多雲偶陣雨 (降水 60%)',tempRange:'23–28°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['04:00','出發','前往桃園機場。車程抓 50–70 分鐘，05:00 前抵達最安心。','Taoyuan International Airport Terminal 2','car'],
+ ['08:00','BR106 航班','預計 11:20 抵達福岡。入境後轉乘地鐵進入市區。','Fukuoka Airport International Terminal','airplane-tilt'],
  ['12:20','前往飯店／寄放行李','飯店 15:00 check-in。先寄放行李，下午再回來。',hotel.name,'train'],
- ['15:00','Check-in','今天只安排飯店周邊、博多站、Canal City 輕鬆散步。',hotel.name,'map-pin'],
- ['18:30','晚餐：飯店附近','第一晚不要排隊名店；以走路可回飯店為主。','Canal City Hakata','fork-knife'] ],spots:[['飯店周邊','博多站、祇園、Canal City 都可步行。第一天重點是把節奏放慢。',hotel.name],['Canal City Hakata','下雨或太熱時很好用的備案。餐廳與藥妝可順路看。','Canal City Hakata']]},
-{date:'2026/07/05 Sun',short:'7/05',label:'Outdoor Shopping',people:'Agnes + 老公',focus:'戶外用品日。Snow Peak、mont-bell 為主，其他戶外品牌順路再看。',weather:'市區逛街日。穿好走的鞋，帶薄外套，百貨冷氣會冷。',items:[
- ['08:00','飯店早餐','每天早餐固定在飯店吃，不另外安排早餐店。',hotel.name,'fork-knife'],
- ['09:30','前往天神','今天以天神商圈為主，少換車、少繞路。','Tenjin Station Fukuoka','train'],
- ['10:00','ONE FUKUOKA BLDG.','新商場。Snow Peak、書店、咖啡與生活品牌集中，先從這裡開始。','ONE FUKUOKA BLDG.','buildings'],
- ['10:20','Snow Peak ONE FUKUOKA BLDG.','看鈦杯、服飾、小物、野餐用品。大型裝備先看就好。','Snow Peak ONE FUKUOKA BLDG.','shopping-bag'],
- ['11:40','點心／咖啡','不安排午餐。逛到一段落就坐下來休息。','ONE FUKUOKA BLDG coffee','coffee'],
- ['13:00','mont-bell 福岡天神','戶外衣物、帽子、防曬、雨具、登山小物。建議停留 60–90 分鐘。','mont-bell Fukuoka Tenjin','shopping-bag'],
- ['15:00','戶外品牌自由逛','Patagonia、ARC\'TERYX、好日山荘、石井 Sports，依體力選 1–2 間即可。','Kojitsu Sanso Fukuoka Tenjin','shopping-bag'],
- ['16:30','甜點／咖啡休息','今天的目標不是掃店，是慢慢買。','Tenjin cafe dessert','ice-cream'],
- ['18:30','晚餐：天神或博多','不排隊名店。以燒鳥、居酒屋、定食為主.','Tenjin dinner','fork-knife'],
- ['20:30','回飯店','整理戰利品、補 Shopping List。',hotel.name,'buildings']],spots:[['ONE FUKUOKA BLDG.','Day2/Day3 核心商場。戶外、書店、咖啡與生活風格都集中。','ONE FUKUOKA BLDG.'],['Snow Peak ONE FUKUOKA BLDG.','今日必看。鈦杯、小物、Apparel 優先，大型帳篷先不要衝動購買。','Snow Peak ONE FUKUOKA BLDG.'],['mont-bell 福岡天神','比起紀念品，更適合買真正會用的帽子、雨具、防曬外套與登山小物。','mont-bell Fukuoka Tenjin']]},
-{date:'2026/07/06 Mon',short:'7/06',label:'Lifestyle Shopping + 藥妝',people:'Agnes + 老公',focus:'生活用品、藥妝、美妝與伴手禮。今天把必買清單先補齊。',weather:'建議帶環保袋；藥妝買多會重，下午可先回飯店放東西。',items:[
- ['08:00','飯店早餐','早餐固定飯店。',hotel.name,'fork-knife'],
- ['09:40','前往天神','今天集中在天神，不把福岡塔排在今天，避免購物後還要趕夜景。','Tenjin Station Fukuoka','train'],
- ['10:00','ONE FUKUOKA BLDG.','若 Day2 沒逛完，今天補 Snow Peak、書店與生活品牌。','ONE FUKUOKA BLDG.','buildings'],
- ['11:30','BEAMS / PARCO 周邊','看 BEAMS、服飾、雜貨與小包。喜歡再買，不需要硬逛完。','BEAMS Fukuoka','shopping-bag'],
- ['13:00','點心休息','今天不排午餐，改成甜點與咖啡。','Tenjin dessert','ice-cream'],
- ['14:00','MUJI / Loft / 3COINS','MUJI 食品、文具、收納；Loft 看美妝雜貨；3COINS 順路即可。','MUJI Tenjin Fukuoka','shopping-bag'],
- ['15:30','藥妝補貨','ALLIE、資生堂、ELIXIR、眼藥水、防曬補貨。看 Sun Drug / Matsukiyo / @cosme。','Sun Drug Tenjin Fukuoka','shopping-bag'],
- ['17:00','回飯店放東西','如果買很多，先回飯店放東西再出門吃晚餐。',hotel.name,'buildings'],
- ['18:30','晚餐：博多或天神','保留彈性。若累了就飯店附近吃。','Hakata dinner','fork-knife']],spots:[['BEAMS Fukuoka','看 BEAMS PLUS、包包、帽子、雜貨與日本限定商品。','BEAMS Fukuoka'],['MUJI','食品、咖哩、文具、香氛、旅行小物優先。大件商品不要買。','MUJI Fukuoka Tenjin'],['Loft / 藥妝','今天的任務是把必買清單補齊。找不到商品時，用 Shopping List 的圖片給店員看。','Tenjin Loft Fukuoka']]},
-{date:'2026/07/07 Tue',short:'7/07',label:'城市 Relax + 福岡塔',people:'Agnes + 老公',focus:'公園、美術館、海邊與夜景。這天是夫妻慢步調的一天。',weather:'戶外＋室內混合。傍晚海邊有風，帶薄外套。',items:[
- ['08:00','飯店早餐','早餐固定飯店。',hotel.name,'fork-knife'],
- ['09:30','大濠公園','慢慢散步，不用繞整圈。夏天以舒服為主。','Ohori Park Fukuoka','tree'],
- ['10:45','福岡市美術館','看展、吹冷氣、休息。若展覽不吸引，縮短停留即可。','Fukuoka Art Museum','paint-brush'],
- ['12:30','午餐／咖啡','大濠或赤坂周邊找舒服餐廳。','Ohori Park cafe','coffee'],
- ['14:00','回飯店休息','後半段有海邊與福岡塔，下午先休息。',hotel.name,'buildings'],
- ['16:30','前往百道海濱','傍晚再去比較舒服。','Momochi Seaside Park','train'],
- ['17:30','百道海濱散步／晚餐','先海邊散步，再附近吃晚餐。','Momochi Seaside Park dinner','map-pin'],
- ['19:30','福岡塔夜景','營業到晚間，夜景比白天適合。','Fukuoka Tower','binoculars'],
- ['20:45','回飯店','隔天兒子抵達，今晚不要太晚。',hotel.name,'buildings']],spots:[['大濠公園','福岡市區最舒服的放空點之一。重點不是走完，而是坐下來。','Ohori Park Fukuoka'],['福岡市美術館','適合安排在白天避暑。展覽若不合胃口，當作休息站也很好。','Fukuoka Art Museum'],['福岡塔','夜景日。排 Day4 而非 Day3，避免購物後還要趕場。','Fukuoka Tower']]},
-{date:'2026/07/08 Wed',short:'7/08',label:'兒子抵達 + LaLaport 鋼彈',people:'Agnes + 老公 + 兒子',focus:'上午放慢，中午接兒子，下午看鋼彈。',weather:'接機與商場日。兒子剛到，不要排太累。',items:[
- ['08:00','飯店早餐','你和老公先慢慢吃早餐。',hotel.name,'fork-knife'],
- ['10:30','前往福岡機場','兒子搭 BR106，預計 11:20 抵達。抓入境與領行李時間。','Fukuoka Airport International Terminal','train'],
- ['12:20','會合／午餐','先讓兒子吃飯，不要餓著逛商場。','Fukuoka Airport restaurant','fork-knife'],
- ['13:30','前往 LaLaport 福岡','搭車前往商場，看鋼彈與簡單逛街。','LaLaport Fukuoka','bus'],
- ['14:30','RX-93ff ν Gundam','先看 1:1 鋼彈，再進商場慢慢逛。','RX-93ff ν Gundam LaLaport Fukuoka','robot'],
- ['16:00','LaLaport 自由時間','鋼彈 Park、商場、休息，依兒子精神調整。','LaLaport Fukuoka','shopping-bag'],
- ['18:30','晚餐：LaLaport 或回博多','若大家累了，就在商場解決。','LaLaport Fukuoka dinner','fork-knife'],
- ['20:30','回飯店','明天糸島，今晚早點休息。',hotel.name,'buildings']],spots:[['RX-93ff ν Gundam','兒子加入後第一個重點。先拍照，再決定要不要進 Gundam Park。','RX-93ff ν Gundam LaLaport Fukuoka'],['LaLaport 福岡','大型商場，適合接機日下午。吃飯、休息、看鋼彈都在同一處。','LaLaport Fukuoka']]},
-{date:'2026/07/09 Thu',short:'7/09',label:'糸島',people:'三人',focus:'海邊、咖啡、拍照。今天看海，不趕景點。',weather:'海邊日。帽子、防曬、墨鏡、水都要帶。',items:[
- ['08:00','飯店早餐','早餐固定飯店。',hotel.name,'fork-knife'],
- ['09:00','出發前往糸島','建議視天氣選擇包車／租車／大眾運輸。若天氣差，改市區備案。','Itoshima Fukuoka','car'],
- ['10:30','櫻井二見浦夫婦岩','糸島代表海景。拍照後不要久站曝曬。','Sakurai Futamigaura Couple Stones','waves'],
- ['12:00','海邊咖啡／午餐','選一間海景咖啡坐下來，今天重點是放空。','Itoshima seaside cafe','coffee'],
- ['14:00','糸島小店／甜點','依體力選 1–2 個點，不硬塞。','Itoshima shopping cafe','shopping-bag'],
- ['16:00','慢慢回福岡市區','不要拖到太晚，隔天湯布院需要早出門。',hotel.name,'car'],
- ['18:30','晚餐：飯店附近','輕鬆吃，整理明天車票與行李。','Hakata dinner','fork-knife']],spots:[['櫻井二見浦夫婦岩','糸島必去海景。夏天注意防曬與補水。','Sakurai Futamigaura Couple Stones'],['糸島海景咖啡','今天不追店，重點是找一間能坐下看海的地方。','Itoshima seaside cafe']]},
-{date:'2026/07/10 Fri',short:'7/10',label:'湯布院',people:'三人',focus:'山景小鎮、湯之坪街道、金鱗湖。今天唯一任務是不要趕。',weather:'山區日。早晚可能涼，帶薄外套；也要防曬。',items:[
- ['07:00','飯店早餐','今天交通較早，早餐提早。',hotel.name,'fork-knife'],
- ['07:43','前往湯布院','去程可選 Yufu 1 或高速巴士。若已訂票，以車票時間為準。','Yufuin Station','train'],
- ['10:00','抵達由布院','先確認回程時間與車站位置，再開始散步。','Yufuin Station','map-pin'],
- ['10:20','湯之坪街道','先逛街道，小店、甜點、雜貨慢慢看。','Yunotsubo Street Yufuin','shopping-bag'],
- ['12:30','午餐','今天可以吃正式午餐，不要排隊太久。','Yufuin lunch','fork-knife'],
- ['14:00','咖啡／甜點／足湯','找地方坐下，不要一直走。','Yufuin cafe','coffee'],
- ['15:30','金鱗湖','放下午較舒服。拍照、散步即可。','Kinrin Lake Yufuin','waves'],
- ['16:30','回程','若買到由布院之森回程，就把觀光列車當作今天收尾。','Yufuin Station','train'],
- ['19:00','回博多／簡單晚餐','今天交通時間長，晚餐以飯店附近為主。',hotel.name,'buildings']],spots:[['湯之坪街道','湯布院主散步街。小店很多，不需要每間都逛。','Yunotsubo Street Yufuin'],['金鱗湖','放在下午，光線較柔和，人潮也可能稍少。','Kinrin Lake Yufuin'],['由布院之森','若買到回程票，就把列車本身當作景點。沒買到也不影響湯布院行程。','Yufuin no Mori']]},
-{date:'2026/07/11 Sat',short:'7/11',label:'門司港',people:'三人',focus:'港口、老建築、關門海峽。可選擇搭船到下關。',weather:'港邊日。帽子、防曬與水；若風大，薄外套。',items:[
- ['08:00','飯店早餐','早餐固定飯店。',hotel.name,'fork-knife'],
- ['09:00','前往門司港','博多到小倉，再轉往門司港。時間依實際車票調整。','Mojiko Station','train'],
- ['10:30','門司港車站／老建築散步','先看車站與港口周邊，慢慢拍照。','Mojiko Retro','buildings'],
- ['12:00','午餐：門司港燒咖哩','門司港名物。找不用排太久的店。','Mojiko Yaki Curry','fork-knife'],
- ['13:30','門司港 Retro','老建築、港邊、咖啡。今天適合慢慢走。','Mojiko Retro','map-pin'],
- ['14:30','Optional：搭船到下關','船程短，若天氣好與體力夠，可以去唐戶市場周邊走走。','Kanmon Ferry Mojiko','boat'],
- ['16:30','回程準備','不要拖太晚，隔天回台灣。','Mojiko Station','train'],
- ['18:30','最後晚餐','回博多後吃最後一餐，順便補最後採買。','Hakata dinner','fork-knife']],spots:[['門司港 Retro','老港口與洋樓群，適合慢慢散步，不是趕景點的地方。','Mojiko Retro'],['關門汽船','Optional。搭船跨關門海峽到下關，時間短但很有旅行感。','Kanmon Ferry Mojiko'],['唐戶市場','若營業時間與體力都合適再去，不列為必做。','Karato Market']]},
-{date:'2026/07/12 Sun',short:'7/12',label:'回台灣',people:'三人',focus:'收行李、退房、前往機場。今天只求穩。',weather:'回程日。行李與護照優先，不安排額外行程。',items:[
- ['08:00','飯店早餐','最後一餐飯店早餐。',hotel.name,'fork-knife'],
- ['09:30','整理行李','檢查護照、錢包、手機、充電器、購物品。',hotel.name,'checks'],
- ['11:00','Check-out','飯店退房。依 BR105 時間決定是否先寄放行李或直接去機場。',hotel.name,'buildings'],
- ['12:00','前往福岡機場','國際線建議抓充裕時間。','Fukuoka Airport International Terminal','train'],
- ['15:50','BR105 FUK → TPE','回台灣。','Fukuoka Airport International Terminal','airplane-tilt']],spots:[['回程 Checklist','護照、機票、手機、充電線、免稅品、購物清單與行李重量。',hotel.name]]}
+ ['15:00','Check-in','安排飯店周邊、博多站、Canal City 輕鬆散步。',hotel.name,'map-pin'],
+ ['18:30','晚餐：飯店附近','首晚不排隊名店；以步行可輕鬆往返飯店為主。','Canal City Hakata','fork-knife'] ],
+ spots:[
+  ['飯店周邊散策','博多站、祇園、櫛田神社均在步行範圍內，街道充滿博多舊城區的優雅古樸氛圍，適合放慢節奏熟悉地理位置。',hotel.name],
+  ['Canal City Hakata','擁有 180 公尺人造運河的複合式商場。除了各大服飾品牌，定時演出的音樂噴泉水舞秀與大螢幕 3D 投影非常值得駐足一觀。','Canal City Hakata']
+ ]},
+{date:'2026/07/05 Sun',dayNum:'第二日',weekday:'週日',short:'05',label:'Outdoor Shopping',peopleIcon:'users',focus:'鎖定 SP 與 MB，其餘順路再看。',weatherTxt:'短暫陣雨 (降水 60%)',tempRange:'23–28°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:30','前往天神','以天神商圈為主，減少頻繁換車與繞路。','Tenjin Station Fukuoka','train'],
+ ['10:00','ONE FUKUOKA BLDG.','新商場。進駐 Snow Peak、知名書店與生活風格品牌。','ONE FUKUOKA BLDG.','footprints'],
+ ['10:20','Snow Peak ONE FUKUOKA BLDG.','位於 2F。主看鈦杯、服飾與精緻戶外小物。','Snow Peak ONE FUKUOKA BLDG.','shopping-bag'],
+ ['11:40','點心／咖啡休息','位於 B1F 餐飲區。逛到一段落就坐下來休息放空。','ONE FUKUOKA BLDG coffee','coffee'],
+ ['13:00','mont-bell 福岡天神','戶外衣物、帽子、防曬、雨具、登山小物。建議停留 60–90 分鐘。','mont-bell Fukuoka Tenjin','footprints'],
+ ['15:00','戶外品牌自由逛','順路瀏覽 Patagonia 與 ARC\'TERYX。','Kojitsu Sanso Fukuoka Tenjin','footprints'],
+ ['16:30','甜點／咖啡休息','不以掃店為目標，保持步調慢慢逛。','Tenjin cafe dessert','footprints'],
+ ['18:30','晚餐：天神商圈','不排隊名店。以在地燒鳥、居酒屋、定食為主。','Tenjin dinner','footprints'],
+ ['20:30','回飯店','整理今日收穫、調整後續清單。',hotel.name,'train']],
+ spots:[
+  ['ONE FUKUOKA BLDG.','天神全新地標。結合現代美學建築與大面積綠化空間，內部除精選品牌外，整體的空間呼吸感與生活風格規劃非常優雅舒適。','ONE FUKUOKA BLDG.'],
+  ['Snow Peak 旗艦概念店','全日本少數大型直營概念店。除了經典鈦杯、職人營釘小物外，店內展示的高階限定服飾（Apparel 系列）質感極佳。','Snow Peak ONE FUKUOKA BLDG.'],
+  ['mont-bell 福岡天神','店面寬敞、品項極度齊全。最值得入手的是高機能輕量雨傘、吸濕排汗防曬帽，以及兼具設計感與實用性的登山機能小物。','mont-bell Fukuoka Tenjin']
+ ]},
+{date:'2026/07/06 Mon',dayNum:'第三日',weekday:'週一',short:'06',label:'Lifestyle Shopping + 藥妝',peopleIcon:'users',focus:'鎖定生活美妝與伴手禮，今日補齊必買清單。',weatherTxt:'陰天轉多雲 (降水 40%)',tempRange:'25–31°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:40','前往天神','今日行程集中在天神，避免購物後仍需趕景點。','Tenjin Station Fukuoka','train'],
+ ['10:00','ONE FUKUOKA BLDG.','若昨日未逛完，可於今日補齊漏掉的生活風格品牌。','ONE FUKUOKA BLDG.','footprints'],
+ ['11:30','BEAMS / PARCO 周邊','看 BEAMS 服飾與雜貨小包。隨心瀏覽，輕鬆無壓力。','BEAMS Fukuoka','footprints'],
+ ['13:00','點心休息','不排正式午餐，改成咖啡廳甜點時光。','Tenjin dessert','coffee'],
+ ['14:00','MUJI / Loft / 3COINS','看 MUJI 收納、Loft 美妝雜貨，3COINS 則順路造訪。','MUJI Tenjin Fukuoka','footprints'],
+ ['15:30','藥妝補貨','採購防曬與常用保健品。主看 Sun Drug / Matsukiyo。','Sun Drug Tenjin Fukuoka','footprints'],
+ ['17:00','回飯店放東西','若提袋較重，建議先返回飯店放置衣物再出門晚餐。',hotel.name,'train'],
+ ['18:30','晚餐：博多地區','保留彈性，以飯店周邊舒服好吃的餐廳優先。','Hakata dinner','footprints']],
+ spots:[
+  ['BEAMS Fukuoka','重點看 BEAMS PLUS 與限定聯名款包袋。日本限定的剪裁與雜貨質感極佳，非常適合尋找兼具文青感與機能性的日常穿搭配件。','BEAMS Fukuoka'],
+  ['MUJI 天神大名','大型旗艦店。除了限定食品與在地咖哩包，這裡的旅遊收納系列與香氛選品最為齊全，是補齊日常優雅小物的絕佳地點。','MUJI Fukuoka Tenjin'],
+  ['天神 Loft & 藥妝一條街','Loft 專攻季節限定的美妝與文具雜貨。找不到藥妝商品時，直接出示 Shopping List 圖片詢問店員，效率最高。','Tenjin Loft Fukuoka']
+ ]},
+{date:'2026/07/07 Tue',dayNum:'第四日',weekday:'週二',short:'07',label:'城市 Relax + 福岡塔',peopleIcon:'users',focus:'公園、美術館、海邊與夜景，今天專屬慢步調。',weatherTxt:'晴時多雲 (降水 20%)',tempRange:'26–32°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:30','大濠公園','悠閒散步，隨意駐足。夏天以舒適為主。','Ohori Park Fukuoka','train'],
+ ['10:45','福岡市美術館','看展與室內休息。館內冷氣舒適、動線流暢。','Fukuoka Art Museum','footprints'],
+ ['12:30','午餐／咖啡','大濠或赤坂周邊找間舒服精緻的餐廳。','Ohori Park cafe','footprints'],
+ ['14:00','回飯店休息','後半段行程包含海邊與福岡塔，下午先回房歇息。',hotel.name,'train'],
+ ['16:30','前往百道海濱','傍晚海風徐徐時造訪最為舒適。','Momochi Seaside Park','train'],
+ ['17:30','百道海濱散步／晚餐','沿著海灘漫步，並在周邊享用晚餐。','Momochi Seaside Park dinner','map-pin'],
+ ['19:30','福岡塔夜景','營業至晚間，璀璨夜景比白天更具觀賞價值。','Fukuoka Tower','binoculars'],
+ ['20:45','回飯店','今日不宜過晚，保留體力給隔日行程。',hotel.name,'train']],
+ spots:[
+  ['大濠公園','福岡最美的城市綠洲。環繞巨大湖泊，極具放空感。建議在湖畔咖啡廳稍坐，看水鳥與遠處綠意，徹底放慢旅行步調。','Ohori Park Fukuoka'],
+  ['福岡市美術館','位於公園內，建築美學本身即是景點。戶外展示有草間彌生的知名巨型南瓜，館內特展與常設當代藝術極具看頭。','Fukuoka Art Museum'],
+  ['福岡塔 & 百道海濱','高 234 公尺的日本最高海濱鐵塔。夜間塔身會亮起精緻主題燈光，由展望台可 360 度俯瞰市區夜景與海灣雙重絕景。','Fukuoka Tower']
+ ]},
+{date:'2026/07/08 Wed',dayNum:'第五日',weekday:'週三',short:'08',label:'家人抵達 + LaLaport 鋼彈',peopleIcon:'users-three',focus:'接機後直奔鋼彈商場，晚間漫步中洲一蘭。',weatherTxt:'多雲時陰 (降水 30%)',tempRange:'26–32°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐.（無外食安排）',hotel.name,'fork-knife'],
+ ['10:30','前往福岡機場','航班預計 11:20 抵達。從飯店出發前往國際線接機。','Fukuoka Airport International Terminal','train'],
+ ['12:20','會合／午餐','於機場周邊先行用餐，補足體力後再前往商場。','Fukuoka Airport restaurant','fork-knife'],
+ ['13:30','前往 LaLaport 福岡','搭車前往大型商場，主看巨型鋼彈。','LaLaport Fukuoka','bus'],
+ ['14:30','巨型鋼彈 & Gundam Park','先在戶外觀賞 1:1 鋼彈，再進館內慢慢瀏覽。','RX-93ff ν Gundam LaLaport Fukuoka','robot'],
+ ['16:00','前往博多車站','搭車返回博多車站商圈。','Hakata Station','bus'],
+ ['16:30','寶可夢中心福岡店','位於博多 AMU PLAZA 8F。定點瀏覽原創周邊與限定商品。','寶可夢中心 福岡','shopping-bag'],
+ ['19:30','一蘭拉麵總店 & 漫步','步行前往中洲總店。外牆壯觀且晚間常有熱鬧的燈光氛圍。','一蘭 本社総本店','footprints'],
+ ['21:00','步行回飯店','晚餐後散步放空，從容返回飯店休息。',hotel.name,'footprints']],
+ spots:[
+  ['1:1 巨型鋼彈','高達 24.8 公尺的「實物大 v 鋼彈」。每日定時有手指與頭部連動的聲光動態秀，背後大螢幕會播放限定動畫影片，視覺震撼。','RX-93ff ν Gundam LaLaport Fukuoka'],
+  ['寶可夢中心福岡店','位於博多 AMU PLAZA 8F。門口有帥氣的密勒頓雕像，販售大量九州限定皮卡丘及原創周邊，是不可錯過的精緻選品店。','寶可夢中心 福岡'],
+  ['一蘭拉麵總店（中洲）','全棟懸掛紅燈籠的博多著名地標。• 表演時間：每天 20:00 - 20:15。• 內容：店員於陽台進行一蘭原創曲演奏與舞蹈。• 最佳位置：大樓對面街道。','一蘭 本社総本店']
+ ]},
+{date:'2026/07/09 Thu',dayNum:'第六日',weekday:'週四',short:'09',label:'糸島',peopleIcon:'users-three',focus:'海邊、咖啡、拍照，今天看海不趕景點。',weatherTxt:'海邊晴朗紫外線強 (降水 10%)',tempRange:'26–33°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40230/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:00','出發前往糸島','依天氣選擇包車或大眾運輸。若氣候不佳則啟動市區備案。','Itoshima Fukuoka','car'],
+ ['10:30','櫻井二見浦夫婦岩','經典海景。沙灘合影，注意高溫曝曬。','Sakurai Futamigaura Couple Stones','waves'],
+ ['12:00','海邊咖啡／午餐','挑選一間能直面海景的咖啡廳坐下，主打放空。','Itoshima seaside cafe','coffee'],
+ ['14:00','糸島文創小店','隨心探訪 1–2 家在地特色手作店。','Itoshima shopping cafe','shopping-bag'],
+ ['16:00','返回福岡市區','不要拖到太晚，隔日湯布院行程需要早出門。',hotel.name,'car'],
+ ['18:30','晚餐：飯店附近','輕鬆用餐，順便整理明日車票與行李。','Hakata dinner','fork-knife']],
+ spots:[
+  ['櫻井二見浦夫婦岩','蔚藍海景中屹立的白色鳥居，與後方兩座由注連繩緊繫的夫婦岩交織。夕陽百選名景，白色大鳥居與湛藍海面靜謐且神誠。','Sakurai Futamigaura Couple Stones'],
+  ['糸島海景咖啡廊道','沿著海岸線分布的質感木造咖啡廳群。重點不在於追求名店，而是挑選一家擁有戶外露臺、能靜坐聽浪、徹底放慢呼吸的角落。','Itoshima seaside cafe']
+ ]},
+{date:'2026/07/10 Fri',dayNum:'第七日',weekday:'週五',short:'10',label:'湯布院',peopleIcon:'users-three',focus:'山景小鎮、金鱗湖，今天任務是絕不趕路。',weatherTxt:'山區午後局部陣雨 (降水 40%)',tempRange:'22–31°C',wniUrl:'https://weathernews.jp/onebox/tenki/oita/44213/',items:[
+ ['07:00','飯店早餐','今日車班較早，早餐時間提前。',hotel.name,'fork-knife'],
+ ['07:43','特急列車前往湯布院','去程搭乘特急列車。車程時間約 2 小時 15 分鐘。','Yufuin Station','train'],
+ ['10:00','抵達由布院','先於車站確認回程車次後，再開始慢活散步。','Yufuin Station','map-pin'],
+ ['10:20','湯之坪街道','順著街道瀏覽。在地點心、手作小物與宮崎駿店鋪十分精緻。','Yunotsubo Street Yufuin','shopping-bag'],
+ ['12:30','午餐','享用在地特色料理。以不用排隊太久的店家為主。','Yufuin lunch','fork-knife'],
+ ['14:00','咖啡廳／足湯體驗','找處安靜的地方坐下，避免長時間連續行走。','Yufuin cafe','coffee'],
+ ['15:30','金鱗湖','安排在下午造訪，此時光線柔和，散步最為舒適。','Kinrin Lake Yufuin','waves'],
+ ['16:30','回程班次','搭乘觀光列車返回博多，將列車本身視為體驗一環。','Yufuin Station','train'],
+ ['19:00','抵達博多／晚餐','今日車程較長，晚餐安排在飯店附近輕鬆享用。',hotel.name,'buildings']],
+ spots:[
+  ['湯之坪街道','群山環繞的溫泉小鎮步道。除了在地特色點心（如 B-speak 蛋糕捲、金賞可樂餅），木造的特色工藝小店非常適合悠閒細逛。','Yunotsubo Street Yufuin'],
+  ['金鱗湖','因湖底同時湧出溫泉與清水而聞名。午後陽光灑落時，湖面波光粼粼如魚鱗般閃耀，沿著湖畔木棧道散步，氛圍極其從容靜謐。','Kinrin Lake Yufuin'],
+  ['由布院之森列車','極具盛名的復古綠色觀光列車。全車採用優雅的木質內裝、設有專屬觀景餐車，沿途窗外的大自然山林山谷景致本身就是絕佳享受。','Yufuin no Mori']
+ ]},
+{date:'2026/07/11 Sat',dayNum:'第八日',weekday:'週六',short:'11',label:'門司港',peopleIcon:'users-three',focus:'港口、老建築與海峽，漫步復古洋樓商圈。',weatherTxt:'港邊晴朗風稍大 (降水 20%)',tempRange:'25–32°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40100/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:00','前往門司港','搭乘 JR 列車至小倉站，再轉往門司港。','Mojiko Station','train'],
+ ['10:30','門司港車站／古蹟建築','欣賞保存完好的百年復古車站，在港區優雅拍照。','Mojiko Retro','buildings'],
+ ['12:00','午餐：燒咖哩','品嚐當地的名物燒咖哩。','Mojiko Yaki Curry','fork-knife'],
+ ['13:30','門司港 Retro 散步','漫步於舊海關、洋樓群與港邊文創雜貨店。','Mojiko Retro','map-pin'],
+ ['14:30','關門汽船（自由選項）','可選搭單程 5 分鐘渡輪跨越海峽至對岸下關唐戶。','Kanmon Ferry Mojiko','boat'],
+ ['16:30','準備回程','不要拖到太晚，今晚需保留時間整理回國行李。','Mojiko Station','train'],
+ ['18:30','最後晚餐','返回博多享用旅程最後一餐，並在周邊補齊免稅品。','Hakata dinner','fork-knife']],
+ spots:[
+  ['門司港 Retro 洋樓群','保留大量大正時代的紅磚與西洋風格建築（如舊大阪商船、舊門司海關）。漫步於古老海港邊，能深刻感受濃郁的和洋兼蓄浪漫氛圍。','Mojiko Retro'],
+  ['藍翼門司吊橋 (Blue Wing)','日本唯一的步行者專用活動橋。每逢整點，橋身會隨著音樂優雅向天空開啟 60 度，是港區最經典的動態景觀。','Blue Wing Mojiko']
+ ]},
+{date:'2026/07/12 Sun',dayNum:'第九日',weekday:'週日',short:'12',label:'回台灣',peopleIcon:'users-three',focus:'行李與證件優先，今日行程只求平穩。',weatherTxt:'陽光普照 (降水 10%)',tempRange:'25–33°C',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/',items:[
+ ['08:00','飯店早餐','每日晨間，悠閒享用飯店早餐。',hotel.name,'fork-knife'],
+ ['09:30','整理行李','仔細核對護照、免稅憑證、行動電源與重要購物品。',hotel.name,'checks'],
+ ['11:00','Check-out','辦理退房手續。依返台航班時間直接前往機場。',hotel.name,'buildings'],
+ ['12:00','前往福岡機場','國際線回程建議預留充裕時間辦理登機。','Fukuoka Airport International Terminal','train'],
+ ['15:50','BR105 航班','返台。','Fukuoka Airport International Terminal','airplane-tilt']],
+ spots:[
+  ['回程 Checklist','務必確認免稅單保存狀態、隨身行李重量分配、護照與登機憑證是否就位。在機場免稅店補齊最後的博多伴手禮（如明太子、小雞饅頭）。','Checklist']
+ ]}
 ];
 
 let currentDay=0;
 function i(name){return `<i class="ph-duotone ph-${name}"></i>`}
-function navButton(q,label='導航'){return `<a class="btn light" target="_blank" href="${dir(q)}">${i('navigation-arrow')} ${label}</a>`}
+function peopleIcon(type){
+  if(type==='couple'||type==='users') return i('users');
+  if(type==='family'||type==='users-three') return i('users-three');
+  return i('users-three');
+}
+function navButton(destination,origin,label='導航',icon){return `<a class="btn light" target="_blank" href="${navUrl(destination,origin,icon)}">${i('navigation-arrow')} ${label}</a>`}
+const transitIcons=new Set(['car','airplane-tilt','train','bus','boat','footprints']);
+function isTransit(icon){return transitIcons.has(icon);}
+function mapPinLink(q){return `<a href="${mapSearch(q)}" target="_blank" class="map-pin-link">${i('map-pin')}</a>`}
+function renderTimelineItems(items){
+  return items.map(([time,title,desc,q,icon],idx)=>{
+    const origin=idx>0?items[idx-1][3]:null;
+    const transit=isTransit(icon);
+    const head=transit
+      ? `<h3 style="color:var(--sora-deep);">${i(icon)} ${title}</h3>`
+      : `<h3 class="between" style="color:var(--sora-deep);"><span class="tl-title">${i(icon)} ${title}</span>${mapPinLink(q)}</h3>`;
+    const action=transit?`<div class="actions">${navButton(q,origin,'導航',icon)}</div>`:'';
+    return `<div class="tl"><div class="time">${time}</div>${head}<div class="muted" style="font-size:12px; margin-top:2px;">${desc}</div>${action}</div>`;
+  }).join('');
+}
+function renderSpotCard(name,desc,q){
+  return `<div class="card"><h3 class="between spot-head" style="font-size:15px; font-weight:600; color:var(--sora-deep);"><span>${name}</span>${mapPinLink(q)}</h3><div class="muted" style="font-size:12px; line-height:1.6;">${desc}</div></div>`;
+}
 
 function renderInfo(){
   document.getElementById('page-info').innerHTML=`
- <div class="card"><div class="row"><div class="icon">${i('airplane-tilt')}</div><div class="flex-1"><div class="title">Flight</div><div class="infoItem"><b>BR106</b><br><span class="muted">2026/07/04 08:10 TPE → 11:20 FUK (Agnes + 老公)</span></div><div class="infoItem"><b>BR106</b><br><span class="muted">2026/07/08 08:10 TPE → 11:20 FUK (兒子)</span></div><div class="infoItem"><b>BR105</b><br><span class="muted">2026/07/12 12:20 FUK → 13:45 TPE (三人)</span></div></div></div></div>
- <div class="card"><div class="row"><div class="icon">${i('buildings')}</div><div class="flex-1"><div class="title">Hotel</div><b>${hotel.name}</b><br><span class="muted">${hotel.jp}</span><div class="infoItem"><span class="muted">住所</span><br><span class="small">${hotel.addr}</span></div><div class="infoItem"><span class="muted">電話</span><br><a class="btn ghost small" style="padding:4px 10px; margin-top:4px;" href="tel:${hotel.phone}">${i('phone')} ${hotel.phone}</a></div><div class="infoItem"><span class="muted">Check-in / Check-out</span><br>15:00 / 11:00</div><div class="actions"><a class="btn light" href="${hotel.maps}" target="_blank">${i('map-pin')} 地圖導航</a></div></div></div></div>
- <div class="card"><div class="row"><div class="icon">${i('passport')}</div><div class="flex-1"><div class="title">Visit Japan Web</div><div class="space-y-2" style="display:flex; flex-direction:column; gap:6px;"><label><input type="checkbox" data-check="vjw1"> 入境 QR 已準備</label><label><input type="checkbox" data-check="vjw2"> 海關 QR 已準備</label><label><input type="checkbox" data-check="vjw3"> 護照與機票截圖已離線保存</label></div><div class="note">填寫飯店地址時，可直接複製上方日文地址。</div></div></div></div>
- <div class="card"><div class="row"><div class="icon">${i('ticket')}</div><div class="flex-1"><div class="title">Tickets</div><div class="infoItem"><b>湯布院</b><br><span class="muted">去程：Yufu / 高速巴士待確認。回程：由布院之森若買得到則優先。</span></div><div class="infoItem"><b>門司港</b><br><span class="muted">一般 JR 交通，依當日車次現場購買。</span></div></div></div></div>
- <div class="card"><div class="row"><div class="icon">${i('phone-call')}</div><div class="flex-1"><div class="title">Emergency</div><div class="grid2"><a class="btn ghost" href="tel:110">${i('shield')} 110 警察</a><a class="btn ghost" href="tel:119">${i('first-aid-kit')} 119 救護</a></div><div class="note">緊急時先聯絡飯店，請櫃檯協助叫車或溝通。</div></div></div></div>
- <div class="card"><div class="row"><div class="icon">${i('checks')}</div><div class="flex-1"><div class="title">出發 Checklist</div><div style="display:grid; grid-template-columns:1fr; gap:6px;">${['護照正本','機票與飯店憑證','Visit Japan Web 截圖','eSIM / 漫遊開通確認','信用卡與日幣現金','常備藥品與防曬','行動電源與充電線','Shopping List 圖片就位'].map((x,k)=>`<label><input type="checkbox" data-check="pre${k}"> ${x}</label>`).join('')}</div></div></div>`; 
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('airplane-tilt')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">Flight</div>
+      <div class="infoItem"><b>BR106</b><br><span class="muted">2026/07/04 08:10 TPE → 11:20 FUK ${peopleIcon('couple')}</span></div>
+      <div class="infoItem"><b>BR106</b><br><span class="muted">2026/07/08 08:10 TPE → 11:20 FUK ${i('user')}</span></div>
+      <div class="infoItem"><b>BR105</b><br><span class="muted">2026/07/12 12:20 FUK → 13:45 TPE ${peopleIcon('family')}</span></div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('buildings')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">Hotel</div>
+      <div class="infoItem">
+        <b>${hotel.name}</b>
+        <div class="between" style="align-items:center; margin-top:4px;">
+          <span class="muted">${hotel.jp}</span>
+          <a href="${hotel.maps}" target="_blank" class="hotel-map-link">${i('map-pin')}</a>
+        </div>
+      </div>
+      <div class="infoItem"><span class="muted">住所</span><br><span class="small">${hotel.addr}</span></div>
+      <div class="infoItem"><span class="muted">電話</span><br><a class="btn ghost small" style="padding:4px 10px; margin-top:4px;" href="tel:${hotel.phone}">${i('phone')} ${hotel.phone}</a></div>
+      <div class="infoItem"><span class="muted">Check-in / Check-out</span><br>15:00 / 11:00</div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('identification-card')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">Visit Japan Web</div>
+      <div class="infoItem">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <label><input type="checkbox" data-check="vjw1"> 入境 QR 已準備</label>
+          <label><input type="checkbox" data-check="vjw2"> 海關 QR 已準備</label>
+          <label><input type="checkbox" data-check="vjw3"> 護照與機票截圖已離線保存</label>
+        </div>
+      </div>
+      <div class="infoItem"><div class="note" style="margin-top:0;">填寫飯店地址時，可直接複製上方日文地址。</div></div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('ticket')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">Tickets</div>
+      
+      <div class="infoItem">
+        <b style="font-size:15px; color:var(--sora-deep);">湯布院（由布院）</b>
+        
+        <div style="margin-top:8px;">
+          <b>JR 特急（由布院之森／由布）</b>
+          <div class="small muted" style="padding-left:4px; margin-top:2px; line-height:1.6;">
+            • <span class="call">票價</span>：單程約 ¥5,690 – ¥6,130 ｜ 全車指定席<br>
+            • <span class="call">購票</span>：博多站「綠色窗口」現場購票，或於 JR 九州官網預約。
+          </div>
+        </div>
+        
+        <div style="margin-top:10px;">
+          <b>高速巴士（湯布院號）</b>
+          <div class="small muted" style="padding-left:4px; margin-top:2px; line-height:1.6;">
+            • <span class="call">票價</span>：單程 ¥3,250 ｜ <span class="warn">全車皆須事先預約</span><br>
+            • <span class="call">搭乘</span>：博多巴士總站 3 樓 ｜ 車程約 2.5 小時。
+          </div>
+        </div>
+      </div>
+      
+      <div class="infoItem">
+        <b style="font-size:15px; color:var(--sora-deep);">門司港</b>
+        
+        <div style="margin-top:8px;">
+          <b>JR 鹿兒島本線（快速／普通）</b>
+          <div class="small muted" style="padding-left:4px; margin-top:2px; line-height:1.6;">
+            • <span class="call">票價</span>：單程 ¥1,310 ｜ <span class="call">最推薦</span> 免轉車直達<br>
+            • <span class="call">搭乘</span>：博多站自動售票機，亦可直接刷 IC 卡（SUICA 等）進站。
+          </div>
+        </div>
+        
+        <div style="margin-top:10px;">
+          <b>特急音速號（Sonic）</b>
+          <div class="small muted" style="padding-left:4px; margin-top:2px; line-height:1.6;">
+            • <span class="call">票價</span>：單程指定席約 ¥2,520<br>
+            • <span class="call">搭乘</span>：需於「小倉站」轉車 ｜ 適合想體驗觀光列車、縮短車程時搭乘。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('phone-call')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">Emergency</div>
+      <div class="infoItem">
+        <div class="grid2">
+          <a class="btn ghost" href="tel:110">${i('shield')} 110 警察</a>
+          <a class="btn ghost" href="tel:119">${i('first-aid-kit')} 119 救護</a>
+        </div>
+      </div>
+      <div class="infoItem"><div class="note" style="margin-top:0;">緊急時先聯絡飯店，請櫃檯協助叫車或溝通。</div></div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="row">
+    <div class="icon">${i('checks')}</div>
+    <div class="flex-1">
+      <div class="title" style="color:var(--sora-deep);">出發 Checklist</div>
+      <div class="infoItem">
+        <div style="display:grid; grid-template-columns:1fr; gap:8px;">
+          ${['護照正本','機票與飯店憑證','Visit Japan Web 截圖','eSIM / 漫遊開通確認','信用卡與日幣現金','常備藥品與防曬','行動電源與充電線','Shopping List 圖片就位'].map((x,k)=>`<label><input type="checkbox" data-check="pre${k}"> ${x}</label>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
   restoreChecks();
 }
 
 function restoreChecks(){document.querySelectorAll('[data-check]').forEach(el=>{el.checked=localStorage.getItem('fg_check_'+el.dataset.check)==='1';el.onchange=()=>localStorage.setItem('fg_check_'+el.dataset.check,el.checked?'1':'0')})}
 
+const JMA_REGIONS={
+  fukuoka:{jmaCode:'400000',tempArea:'福岡',wniUrl:'https://weathernews.jp/onebox/tenki/fukuoka/40130/week.html?tab=4'},
+  oita:{jmaCode:'440000',tempArea:'大分',wniUrl:'https://weathernews.jp/onebox/tenki/oita/44213/week.html?tab=4'}
+};
+function getJmaRegionForDay(d){return d.label==='湯布院'?JMA_REGIONS.oita:JMA_REGIONS.fukuoka}
+function dayDateKey(d){return d.date.slice(0,10).replace(/\//g,'-')}
+function jmaWeatherLabel(code){
+  const c=Number(code);
+  if(c>=100&&c<200){if(c===100||c===110)return'晴';if(c===101||c===111)return'晴時多雲';return'晴時多雲'}
+  if(c>=200&&c<300){if(c===200)return'多雲';if(c===201)return'多雲時晴';if(c===202||c===203||c===211||c===214)return'多雲時雨';if(c===313)return'短暫陣雨';return'多雲'}
+  if(c>=300&&c<400)return'雨';
+  return'多雲';
+}
+function parseJmaDay(data,dateKey,region){
+  const weekly=data[data.length-1];
+  if(!weekly||!weekly.timeSeries)return null;
+  const wxSeries=weekly.timeSeries.find(s=>s.areas?.some(a=>a.weatherCodes));
+  const tempSeries=weekly.timeSeries.find(s=>s.areas?.some(a=>a.tempsMin));
+  if(!wxSeries)return null;
+  const wxArea=wxSeries.areas.find(a=>String(a.area.code)===region.jmaCode)||wxSeries.areas[0];
+  const idx=wxSeries.timeDefines.findIndex(t=>t.startsWith(dateKey));
+  if(idx<0)return null;
+  const pop=Math.max(0,...wxArea.pops.slice(idx,idx+1).map(p=>Number(p)).filter(n=>!isNaN(n)));
+  let min,max;
+  if(tempSeries){
+    const tArea=tempSeries.areas.find(a=>a.area.name===region.tempArea)||tempSeries.areas[0];
+    min=tArea.tempsMin[idx];
+    max=tArea.tempsMax[idx];
+  }
+  if(!min||!max)return null;
+  return{label:jmaWeatherLabel(wxArea.weatherCodes[idx]),pop,min,max};
+}
+const jmaCache={};
+let jmaFetchToken=0;
+function weatherFallbackText(d){return `${d.weatherTxt} ｜ ${d.tempRange}`}
+async function fetchJMAWeather(d){
+  const el=document.getElementById('jma-weather-text');
+  if(!el)return;
+  const token=++jmaFetchToken;
+  const region=getJmaRegionForDay(d);
+  const dateKey=dayDateKey(d);
+  const applyFallback=()=>{if(token!==jmaFetchToken)return;el.textContent=weatherFallbackText(d)}
+  try{
+    if(!jmaCache[region.jmaCode]){
+      const res=await fetch(`https://www.jma.go.jp/bosai/forecast/data/forecast/${region.jmaCode}.json`);
+      if(!res.ok)throw new Error('JMA fetch failed');
+      jmaCache[region.jmaCode]=await res.json();
+    }
+    if(token!==jmaFetchToken)return;
+    const parsed=parseJmaDay(jmaCache[region.jmaCode],dateKey,region);
+    if(!parsed){applyFallback();return}
+    el.innerHTML=`${parsed.label} (降水 ${parsed.pop}%) ｜ <span style="color:var(--text-muted);">${parsed.min}–${parsed.max}°C</span>`;
+  }catch(_){applyFallback()}
+}
+
 function renderDaily(){
   const d=days[currentDay];
+  const region=getJmaRegionForDay(d);
   
-  // 橫向滾動日曆子分頁（複製 index.html 天數切換邏輯與質感）
-  let navHtml = `<div class="dayNavScroll">`;
+  let navHtml = `
+    <div class="dayNavContainer">
+      <div class="month-header">07 July</div>
+      <div class="dayNavScroll">`;
   days.forEach((day, idx) => {
     navHtml += `<button class="subtab-btn ${currentDay===idx?'active':''}" onclick="jumpToDay(${idx})">${day.short}</button>`;
   });
-  navHtml += `</div>`;
+  navHtml += `</div></div>`;
 
   document.getElementById('page-daily').innerHTML= navHtml + `
- <div class="card focus"><div class="row"><div class="icon" style="color:var(--sora);">${i('cloud-sun')}</div><div><div class="title" style="font-size:15px;">${d.date} ｜ ${d.label}</div><div class="muted" style="margin-top:4px; line-height:1.6; color:var(--kesizumi);">${d.focus}</div><div style="margin-top:8px;"><span class="pill">${d.people}</span></div>${d.weather?`<div class="note" style="border-color:var(--sora); margin-top:10px;">${d.weather}</div>`:''}</div></div></div>
- <div class="card"><div class="timeline">${d.items.map(([time,title,desc,q,icon])=>`<div class="tl"><div class="time">${time}</div><h3>${i(icon)} ${title}</h3><div class="muted" style="font-size:12px; margin-top:2px;">${desc}</div><div class="actions">${navButton(q)}</div></div>`).join('')}</div></div>
+ <div class="card focus">
+   <div class="row">
+     <div class="icon" style="color:var(--sora-deep); font-size:24px; margin-top:2px;">${i(d.peopleIcon)}</div>
+     <div class="flex-1">
+       <div class="title between" style="font-size:16px; color:var(--sora-deep); margin:0;">
+         <span>${d.dayNum}：${d.label}</span>
+         <span class="day-weekday-tag">${d.weekday}</span>
+       </div>
+       <div class="muted" style="margin-top:8px; line-height:1.6; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${d.focus}">${d.focus}</div>
+       <div class="note" style="border-color:var(--sora); margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+         <div style="display:flex; align-items:center; gap:8px;">
+           <span style="color:var(--yamabuki); font-size:16px; display:inline-flex; align-items:center;">${i('cloud-sun')}</span>
+           <span id="jma-weather-text" style="font-size:12px; color:var(--text-main); font-weight:500;">讀取最新日本官方預報中...</span>
+         </div>
+         <a href="${region.wniUrl}" target="_blank" style="color:var(--sora); font-size:18px; display:inline-flex; align-items:center; transition:color 0.2s;" title="查看該區域 Weathernews 預報">
+           ${i('arrow-square-out')}
+         </a>
+       </div>
+     </div>
+   </div>
+ </div>
+ <div class="card"><div class="timeline">${renderTimelineItems(d.items)}</div></div>
  <div class="sectionTitle">備案與重點紀錄</div>
- ${d.spots.map(([name,desc,q])=>`<div class="card"><h3 style="font-size:15px; font-weight:600; margin:0 0 6px;">${name}</h3><div class="muted" style="font-size:12px; line-height:1.6;">${desc}</div><div class="actions">${navButton(q)}</div></div>`).join('')}`;
+ ${d.spots.map(([name,desc,q])=>renderSpotCard(name,desc,q)).join('')}`;
+  fetchJMAWeather(d);
 }
 
 function jumpToDay(idx){ currentDay=idx; renderDaily(); }
 function autoDay(){const today=new Date();const y=today.getFullYear(),m=String(today.getMonth()+1).padStart(2,'0'),dd=String(today.getDate()).padStart(2,'0');const key=`${y}/${m}/${dd}`;const idx=days.findIndex(d=>d.date.startsWith(key));currentDay=idx>=0?idx:0}
 
-let shopping=JSON.parse(localStorage.getItem('fg_shop')||'null')||[
- {name:'ALLIE 防曬補貨',cat:'防曬',store:'Sun Drug / Matsukiyo',note:'清爽、不熏眼優先。',img:'',done:false},
- {name:'資生堂 / ELIXIR 想看款',cat:'保養',store:'@cosme / Sun Drug',note:'可拿圖片給店員。',img:'',done:false},
- {name:'Snow Peak 鈦杯 / 小物',cat:'Outdoor',store:'Snow Peak ONE FUKUOKA',note:'先看小物，不買大型裝備。',img:'',done:false},
- {name:'mont-bell 帽子 / 雨具',cat:'Outdoor',store:'mont-bell 福岡天神',note:'實用優先。',img:'',done:false},
- {name:'MUJI 咖哩 / 文具',cat:'雜貨',store:'MUJI',note:'輕小、限定商品優先。',img:'',done:false}
+function readStore(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(raw==null||raw==='null')return fallback;
+    return JSON.parse(raw);
+  }catch(_){return fallback}
+}
+
+function switchPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  const page=document.getElementById('page-'+p);
+  if(page)page.classList.add('active');
+  document.querySelectorAll('.tab').forEach(x=>{
+    x.classList.toggle('active',x.dataset.page===p);
+  });
+  const fab=document.getElementById('shopFab');
+  if(fab){
+    fab.classList.toggle('show',p==='shopping'||p==='expense');
+    fab.onclick=p==='expense'?openExpenseSheet:openSheet;
+  }
+  if(p==='daily')renderDaily();
+  if(p==='shopping')renderShopping();
+  if(p==='expense')renderExpense();
+}
+
+let shopping=readStore('fg_shop',null)||[
+ {name:'ALLIE 防曬補貨',cat:'保養品',store:'Sun Drug / Matsukiyo',note:'清爽、不熏眼優先。',img:'',done:false},
+ {name:'資生堂 / ELIXIR 想看款',cat:'保養品',store:'@cosme / Sun Drug',note:'可拿圖片給店員。',img:'',done:false},
+ {name:'Snow Peak 鈦杯 / 小物',cat:'服飾、雜貨',store:'Snow Peak ONE FUKUOKA',note:'先看小物，不買大型裝備。',img:'',done:false},
+ {name:'mont-bell 帽子 / 雨具',cat:'服飾、雜貨',store:'mont-bell 福岡天神',note:'實用優先。',img:'',done:false},
+ {name:'MUJI 咖哩 / 文具',cat:'伴手禮、食物',store:'MUJI',note:'輕小、限定商品優先。',img:'',done:false}
 ];let shopFilter='全部';
+const SHOP_CATS=['保養品','保健食品','醫療用品','服飾、雜貨','伴手禮、食物'];
+function shopCatOptions(){return SHOP_CATS.map(c=>`<option>${c}</option>`).join('')}
 
 function saveShop(){localStorage.setItem('fg_shop',JSON.stringify(shopping))}
 
@@ -480,35 +808,57 @@ function renderShopping(){
   const cats=['全部','未買','已買',...Array.from(new Set(shopping.map(x=>x.cat).filter(Boolean)))];
   let data=shopping.filter(x=>shopFilter==='全部'||(shopFilter==='未買'&&!x.done)||(shopFilter==='已買'&&x.done)||x.cat===shopFilter);
   data=[...data.filter(x=>!x.done),...data.filter(x=>x.done)];
-  document.getElementById('page-shopping').innerHTML=`<div class="card compact"><div class="title" style="margin:0;">Shopping List</div><div class="muted" style="font-size:11px; margin-top:2px;">右下角新增商品，可填寫圖片網路 URL。</div></div><div class="shopFilters">${cats.map(c=>`<button class="filter ${shopFilter===c?'active':''}" onclick="shopFilter='${c}';renderShopping()">${c}</button>`).join('')}</div>${data.length?data.map(x=>shopCard(x,shopping.indexOf(x))).join(''):'<div class="card empty">目前沒有商品</div>'}`;
+  document.getElementById('page-shopping').innerHTML=`<div class="card compact"><div class="title" style="margin:0; color:var(--sora-deep);">Shopping List</div><div class="muted" style="font-size:11px; margin-top:2px;">右下角新增商品，可填寫圖片網路 URL。</div></div><div class="shopFilters">${cats.map(c=>`<button class="filter ${shopFilter===c?'active':''}" onclick="shopFilter='${c}';renderShopping()">${c}</button>`).join('')}</div>${data.length?data.map(x=>shopCard(x,shopping.indexOf(x))).join(''):'<div class="card empty">目前沒有商品</div>'}`;
 }
 
-function shopCard(x,idx){return `<div class="card compact shopItem ${x.done?'done':''}"><button class="check" onclick="shopping[${idx}].done=!shopping[${idx}].done;saveShop();renderShopping()">${x.done?i('check'):''}</button><div><div class="name"><b>${x.name}</b></div><div class="small muted" style="margin:2px 0 4px;">${x.cat||'未分類'} ｜ ${x.store||'未指定店家'}</div>${x.note?`<div class="small" style="color:#78716c;">${x.note}</div>`:''}${x.img?`<a href="${x.img}" target="_blank"><img class="thumb" src="${x.img}" onerror="this.style.display='none'"></a>`:''}</div><button class="del" onclick="shopping.splice(${idx},1);saveShop();renderShopping()">${i('trash')}</button></div>`}
+function shopCard(x,idx){
+  const thumb=x.img?`<a href="${x.img}" target="_blank" class="shopThumb"><img class="thumb" src="${x.img}" alt="" onerror="this.parentElement.style.display='none'"></a>`:'';
+  return `<div class="card compact shopItem ${x.img?'has-thumb':''} ${x.done?'done':''}"><button class="check" onclick="shopping[${idx}].done=!shopping[${idx}].done;saveShop();renderShopping()">${x.done?i('check'):''}</button>${thumb}<div class="shopBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin:2px 0 4px;">${x.cat||'未分類'} ｜ ${x.store||'未指定店家'}</div>${x.note?`<div class="small" style="color:var(--text-muted);">${x.note}</div>`:''}</div><button class="del" onclick="shopping.splice(${idx},1);saveShop();renderShopping()">${i('trash')}</button></div>`;
+}
 
-function openSheet(){document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0;">新增清單商品</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="sn" class="field" placeholder="商品名稱"><select id="sc" class="field"><option>防曬</option><option>保養</option><option>彩妝</option><option>Outdoor</option><option>服飾</option><option>食品</option><option>雜貨</option><option>伴手禮</option></select><input id="ss" class="field" placeholder="建議店家"><input id="si" class="field" placeholder="圖片 URL（可空白）"><textarea id="st" class="field" placeholder="備註備忘"></textarea><div class="sheetActions"><button class="btn ghost" onclick="addShop(false)">繼續新增</button><button class="btn" onclick="addShop(true)">儲存確認</button></div>`;setTimeout(()=>document.getElementById('sn').focus(),50)}
+function openSheet(){document.getElementById('sheetBackdrop').classList.add('open');document.getElementById('shopSheet').classList.add('open');document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">新增清單商品</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="sn" class="field" placeholder="商品名稱"><select id="sc" class="field">${shopCatOptions()}</select><input id="ss" class="field" placeholder="建議店家"><input id="si" class="field" placeholder="圖片 URL（可空白）"><textarea id="st" class="field" placeholder="備註備忘"></textarea><div class="sheetActions"><button class="btn ghost" onclick="addShop(false)">繼續新增</button><button class="btn" onclick="addShop(true)">儲存確認</button></div>`;setTimeout(()=>document.getElementById('sn').focus(),50)}
 function closeSheet(){document.getElementById('sheetBackdrop').classList.remove('open');document.getElementById('shopSheet').classList.remove('open')}
 function addShop(close){const n=document.getElementById('sn').value.trim();if(!n)return;shopping.push({name:n,cat:document.getElementById('sc').value,store:document.getElementById('ss').value.trim(),img:document.getElementById('si').value.trim(),note:document.getElementById('st').value.trim(),done:false});saveShop();renderShopping(); if(close) closeSheet(); else ['sn','ss','si','st'].forEach(id=>document.getElementById(id).value='')}
 
-let expenses=JSON.parse(localStorage.getItem('fg_exp')||'[]');function saveExp(){localStorage.setItem('fg_exp',JSON.stringify(expenses))}
-
+let expenses=readStore('fg_exp',[]);function saveExp(){localStorage.setItem('fg_exp',JSON.stringify(expenses))}
+let expFilter='全部';
+const EXP_CATS=['食','宿','交通','購物','娛樂','門票'];
+const EXP_CURRENCIES=['JPY','TWD','USD'];
+function expCatOptions(){return EXP_CATS.map(c=>`<option>${c}</option>`).join('')}
+function expCurrencyOptions(sel='JPY'){return EXP_CURRENCIES.map(c=>`<option${c===sel?' selected':''}>${c}</option>`).join('')}
+function moneyFmt(cur,amt){const sym={JPY:'¥',TWD:'NT$',USD:'$'};return (sym[cur]||cur+' ')+Number(amt).toLocaleString()}
+function expTotalsHtml(){
+  const map={};
+  expenses.forEach(x=>{const c=x.currency||'JPY';map[c]=(map[c]||0)+Number(x.amount||0)});
+  const parts=Object.entries(map).map(([c,a])=>moneyFmt(c,a));
+  return parts.length?parts.join(' ｜ '):'¥0';
+}
+function expenseCard(x,idx){
+  return `<div class="card compact expItem"><div class="expBody"><div class="name"><b style="color:var(--text-main);">${x.name}</b></div><div class="small muted" style="margin-top:2px;">${x.date} ｜ ${x.cat||'未分類'} ｜ ${x.currency||'JPY'}</div></div><div class="expAmt" style="font-size:15px; font-weight:700; color:var(--sora); white-space:nowrap;">${moneyFmt(x.currency||'JPY',x.amount)}</div><button class="del" onclick="expenses.splice(${idx},1);saveExp();renderExpense()">${i('trash')}</button></div>`;
+}
 function renderExpense(){
-  let total=expenses.reduce((s,x)=>s+Number(x.amount||0),0);
-  document.getElementById('page-expense').innerHTML=`<div class="card"><div class="title">旅途記帳</div><div class="row" style="flex-direction:column; gap:2px;"><input id="edate" class="field" value="${days[currentDay].date.slice(0,10)}"><input id="ename" class="field" placeholder="消費項目（例：一蘭拉麵）"><input id="eamt" class="field" type="number" placeholder="日幣金額 (JPY)"><button class="btn" style="width:100%; justify-content:center; margin-top:4px;" onclick="addExpense()">${i('plus')} 新增紀錄</button></div></div><div class="card compact"><div class="between"><span>累積花費總計</span><span class="total">¥${total.toLocaleString()}</span></div></div>${expenses.map((x,idx)=>`<div class="card compact expenseItem"><div><b>${x.name}</b><br><span class="small muted">${x.date}</span></div><div class="total" style="font-size:15px; margin-right:8px;">¥${Number(x.amount).toLocaleString()}</div><button class="del" onclick="expenses.splice(${idx},1);saveExp();renderExpense()">${i('trash')}</button></div>`).join('')||'<div class="card empty">目前尚無本地記帳紀錄</div>'}`;
+  const extra=Array.from(new Set(expenses.map(x=>x.cat).filter(c=>c&&!EXP_CATS.includes(c))));
+  const allCats=['全部',...EXP_CATS,...extra];
+  let data=expenses.filter(x=>expFilter==='全部'||x.cat===expFilter);
+  data=[...data].reverse();
+  document.getElementById('page-expense').innerHTML=`<div class="card compact"><div class="title" style="margin:0; color:var(--sora-deep);">旅途記帳</div><div class="muted" style="font-size:11px; margin-top:2px;">右下角新增紀錄，可選幣別與消費類別。</div></div><div class="shopFilters">${allCats.map(c=>`<button class="filter ${expFilter===c?'active':''}" onclick="expFilter='${c}';renderExpense()">${c}</button>`).join('')}</div><div class="card compact"><div class="between"><span>累積花費總計</span><span class="total" style="font-size:16px;">${expTotalsHtml()}</span></div></div>${data.length?data.map(x=>expenseCard(x,expenses.indexOf(x))).join(''):'<div class="card empty">目前尚無本地記帳紀錄</div>'}`;
+}
+function openExpenseSheet(){
+  document.getElementById('sheetBackdrop').classList.add('open');
+  document.getElementById('shopSheet').classList.add('open');
+  const defaultDate=days[currentDay].date.slice(0,10);
+  document.getElementById('shopSheet').innerHTML=`<div class="between" style="margin-bottom:12px;"><div class="title" style="margin:0; color:var(--sora-deep);">新增記帳紀錄</div><button class="btn ghost" style="padding:6px; border-radius:50%;" onclick="closeSheet()">${i('x')}</button></div><input id="edate" class="field" value="${defaultDate}"><select id="ecat" class="field">${expCatOptions()}</select><input id="ename" class="field" placeholder="消費項目（例：一蘭拉麵）"><div class="fieldRow"><select id="ecur" class="field" style="margin-top:0;">${expCurrencyOptions('JPY')}</select><input id="eamt" class="field" type="number" placeholder="金額" style="margin-top:0;"></div><div class="sheetActions"><button class="btn ghost" onclick="addExpense(false)">繼續新增</button><button class="btn" onclick="addExpense(true)">儲存確認</button></div>`;
+  setTimeout(()=>document.getElementById('ename').focus(),50);
+}
+function addExpense(close){
+  const name=document.getElementById('ename').value.trim(),amount=document.getElementById('eamt').value;
+  if(!name||!amount)return;
+  expenses.push({date:document.getElementById('edate').value,name,cat:document.getElementById('ecat').value,currency:document.getElementById('ecur').value,amount:Number(amount)});
+  saveExp();renderExpense();
+  if(close)closeSheet();
+  else{document.getElementById('ename').value='';document.getElementById('eamt').value=''}
 }
 
-function addExpense(){const name=document.getElementById('ename').value.trim(),amount=document.getElementById('eamt').value;if(!name||!amount)return;expenses.push({date:document.getElementById('edate').value,name,amount:Number(amount)});saveExp();renderExpense()}
-
-function switchPage(p){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
-  document.getElementById('shopFab').style.display=p==='shopping'?'grid':'none'; 
-  if(p==='daily')renderDaily(); 
-  if(p==='shopping')renderShopping(); 
-  if(p==='expense')renderExpense();
-}
-
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>switchPage(b.dataset.page));
 document.getElementById('shopFab').onclick=openSheet;
 document.getElementById('sheetBackdrop').onclick=closeSheet;
 autoDay();
@@ -516,6 +866,7 @@ renderInfo();
 renderDaily();
 renderShopping();
 renderExpense();
+switchPage('info');
 </script>
 </body>
 </html>
